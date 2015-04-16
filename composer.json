@@ -1,7 +1,7 @@
 {
     "require": {
         "symfony/console": "*",
-        "symfony/finder": "*"
+        "symfony/filesystem": "*"
     },
     "autoload": {
         "psr-4": {

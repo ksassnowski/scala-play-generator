@@ -2,11 +2,11 @@
 
 namespace synectic\Generators\Commands;
 
+use synectic\Generators\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 
 class GenerateControllerCommand extends GeneratorCommand
 {
-
     /**
      * Name of the command.
      *
@@ -22,13 +22,32 @@ class GenerateControllerCommand extends GeneratorCommand
     protected $description = 'Erzeugt einen neuen Controller';
 
     /**
+     * Symfony Finder
+     *
+     * @var Symfony\Component\Finder\Finder
+     */
+    protected $finder;
+
+    /**
+     * Constructor
+     */
+    public function __construct(Filesystem $finder)
+    {
+        parent::__construct();
+
+        $this->finder = $finder;
+    }
+
+    /**
      * Execute the command.
      *
      * @return
      */
     protected function fire()
     {
-        $this->output->writeln('<info>It worked!</info>');
+        $file = $this->getStub();
+
+        $this->output->writeln($file);
     }
 
     /**
@@ -50,7 +69,7 @@ class GenerateControllerCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-
+        return $this->finder->get(__DIR__ . '/../stubs/Controller.stub');
     }
 
 }

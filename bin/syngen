@@ -4,8 +4,11 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use synectic\Generators\Filesystem\Filesystem;
 use synectic\Generators\Commands\GenerateControllerCommand;
 
+$finder = new Filesystem();
+
 $application = new Application();
-$application->add(new GenerateControllerCommand());
+$application->add(new GenerateControllerCommand($finder));
 $application->run();

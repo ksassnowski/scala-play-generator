@@ -1,0 +1,11 @@
+package {{namespace}}
+
+import play.api.mvc._
+
+trait {{name}} {
+  this: Controller =>
+
+}
+
+/** Controller description */
+object {{name}} extends Controller with {{name}}

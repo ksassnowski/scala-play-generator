@@ -2,47 +2,27 @@
 
 namespace synectic\Generators\Commands;
 
-use synectic\Generators\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 
 class GenerateControllerCommand extends GeneratorCommand
 {
-    /**
-     * Root namespace for controllers.
-     *
-     * @var string
-     */
-    protected $rootNamespace = 'de.synectic.syn6.controllers';
 
-    /**
-     * Root path for controller files.
-     *
-     * @var string
-     */
-    protected $rootPath = 'app/de/synectic/syn6/controllers';
-
-    /**
-     * Name of the command.
-     *
-     * @var string 
-     */
     protected $name = 'make:controller';
 
-    /**
-     * Description of the command.
-     *
-     * @var string
-     */
     protected $description = 'Erzeugt einen neuen Controller';
+
+    protected $type = 'Controller';
+
+    protected $rootNamespace = 'de.synectic.syn6.controllers';
+
+    protected $rootPath = 'app/de/synectic/syn6/controllers';
 
     /**
      * Constructor
      */
-    public function __construct(Filesystem $finder)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->finder = $finder;
     }
 
     /**

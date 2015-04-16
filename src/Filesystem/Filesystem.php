@@ -31,9 +31,20 @@ class Filesystem
      */
     public function get($path)
     {
-        if ($this->fs->exists($path)) return file_get_contents($path);
+        if ($this->exists($path)) return file_get_contents($path);
 
         throw new FileNotFoundException("File does not exist at path {$path}");
+    }
+
+    /**
+     * Check if a file or folder exists
+     *
+     * @param string $path
+     * @return boolean
+     */
+    public function exists($path)
+    {
+        return $this->fs->exists($path);
     }
 
     /**

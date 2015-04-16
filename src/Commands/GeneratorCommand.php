@@ -2,6 +2,8 @@
 
 namespace synectic\Generators\Commands;
 
+use synectic\Generators\Filesystem\Filesystem;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,6 +28,13 @@ abstract class GeneratorCommand extends Command
     protected $description;
 
     /**
+     * The type of class that gets generated.
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
      * The command's input (arguments and options)
      *
      * @var Symfony\Component\Console\Input\InputInterface
@@ -39,9 +48,18 @@ abstract class GeneratorCommand extends Command
      */
     protected $output;
 
+    /**
+     * Filesystem
+     *
+     * @var synectic\Generators\Filesystem\Filesystem
+     */
+    protected $finder;
+
     public function __construct()
     {
         parent::__construct($this->name);
+
+        $this->finder = new Filesystem();
 
         $this->setDescription($this->description);
         $this->specifyParameters();
@@ -88,7 +106,7 @@ abstract class GeneratorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        return $this->fire();
+        $this->fire();
     }
 
     /**
@@ -98,17 +116,24 @@ abstract class GeneratorCommand extends Command
      */
     protected function fire()
     {
-        $fileContent = $this->getStub();
-
         $className = $this->input->getArgument('name');
+
+        $path = $this->getPath($className);
+
+        if ($this->finder->exists($path))
+        {
+            return $this->error("{$this->type} {$className} already exists.");
+        }
+
+        $fileContent = $this->getStub();
 
         $this->replaceClassName($fileContent, $className);
 
         $this->replaceNamespace($fileContent, $className);
 
-        $path = $this->getPath($className);
-
         $this->finder->put($this->getPath($className), $fileContent);
+
+        $this->info("{$this->type} {$className} created.");
     }
 
     /**
@@ -147,7 +172,7 @@ abstract class GeneratorCommand extends Command
      * @param string $className
      * @return string
      */
-    protected function replaceClassName(&$fileContent, $className)
+    protected function replaceClassName(&$fileContent, $name)
     {
         $className = end(explode('/', $name));
 
@@ -200,6 +225,26 @@ abstract class GeneratorCommand extends Command
         $path = implode(array_slice($nameParts, 0, -1), '/');
 
         return $this->rootPath . '/' . $path . '/' . $filename;
+    }
+
+    /**
+     * Write an error to the output.
+     *
+     * @param string $message
+     */
+    protected function error($message)
+    {
+        $this->output->writeln("<error>{$message}</error>");
+    }
+
+    /**
+     * Write an info message to the output.
+     *
+     * @param string $message
+     */
+    protected function info($message)
+    {
+        $this->output->writeln("<info>{$message}</info>");
     }
 
 }

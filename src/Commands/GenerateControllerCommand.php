@@ -8,6 +8,20 @@ use Symfony\Component\Console\Input\InputArgument;
 class GenerateControllerCommand extends GeneratorCommand
 {
     /**
+     * Root namespace for controllers.
+     *
+     * @var string
+     */
+    protected $rootNamespace = 'de.synectic.syn6.controllers';
+
+    /**
+     * Root path for controller files.
+     *
+     * @var string
+     */
+    protected $rootPath = 'app/de/synectic/syn6/controllers';
+
+    /**
      * Name of the command.
      *
      * @var string 
@@ -22,13 +36,6 @@ class GenerateControllerCommand extends GeneratorCommand
     protected $description = 'Erzeugt einen neuen Controller';
 
     /**
-     * Symfony Finder
-     *
-     * @var Symfony\Component\Finder\Finder
-     */
-    protected $finder;
-
-    /**
      * Constructor
      */
     public function __construct(Filesystem $finder)
@@ -36,30 +43,6 @@ class GenerateControllerCommand extends GeneratorCommand
         parent::__construct();
 
         $this->finder = $finder;
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return
-     */
-    protected function fire()
-    {
-        $file = $this->getStub();
-
-        $this->output->writeln($file);
-    }
-
-    /**
-     * Get the command's arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'Name des Controllers']
-        ];
     }
 
     /**

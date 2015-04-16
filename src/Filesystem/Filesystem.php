@@ -44,6 +44,6 @@ class Filesystem
      */
     public function put($path, $content)
     {
-        $this->fs->dumpFile($content, $path);
+        $this->fs->dumpFile($path, $content);
     }
 }

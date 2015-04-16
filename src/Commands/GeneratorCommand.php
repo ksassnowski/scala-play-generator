@@ -6,6 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 abstract class GeneratorCommand extends Command
 {
@@ -91,13 +92,35 @@ abstract class GeneratorCommand extends Command
     }
 
     /**
+     * Execute the command.
+     *
+     * @return void
+     */
+    protected function fire()
+    {
+        $fileContent = $this->getStub();
+
+        $className = $this->input->getArgument('name');
+
+        $this->replaceClassName($fileContent, $className);
+
+        $this->replaceNamespace($fileContent, $className);
+
+        $path = $this->getPath($className);
+
+        $this->finder->put($this->getPath($className), $fileContent);
+    }
+
+    /**
      * Return the command's arguments
      *
      * @return array
      */
     protected function getArguments()
     {
-        return [];
+        return [
+            ['name', InputArgument::REQUIRED, 'Name der generierten Klasse']
+        ];
     }
 
     /**
@@ -113,14 +136,70 @@ abstract class GeneratorCommand extends Command
     /**
      * Get the template stub
      *
-     * @return 
+     * @return
      */
     abstract protected function getStub();
 
     /**
-     * Execute the command.
+     * Replace the classname in the template
      *
-     * @return
+     * @param string $fileContent
+     * @param string $className
+     * @return string
      */
-    abstract protected function fire();
+    protected function replaceClassName(&$fileContent, $className)
+    {
+        $className = end(explode('/', $name));
+
+        $fileContent = str_replace("{{name}}", $className, $fileContent); 
+    }
+
+    /**
+     * Replace the namespace in a template.
+     *
+     * @param string $fileContent
+     * @param string $className
+     * @return string
+     */
+    protected function replaceNamespace(&$fileContent, $name)
+    {
+        $namespace = $this->getNamespace($name);
+
+        $fileContent = str_replace("{{namespace}}", $namespace, $fileContent);
+    }
+
+    protected function getNamespace($name)
+    {
+        $nameParts = explode('/', $name);
+
+        if (count($nameParts) === 1)
+        {
+            return $this->rootNamespace;
+        }
+
+        return $this->rootNamespace . '.' .implode(array_slice($nameParts, 0, -1), '.');
+    }
+
+    /**
+     * Extract the filepath from the classname.
+     *
+     * @param string $className
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $nameParts = explode('/', $name);
+
+        $filename = end($nameParts) . '.scala';
+
+        if (count($nameParts) === 1)
+        {
+            return $this->rootPath . '/' . $filename;
+        }
+
+        $path = implode(array_slice($nameParts, 0, -1), '/');
+
+        return $this->rootPath . '/' . $path . '/' . $filename;
+    }
+
 }

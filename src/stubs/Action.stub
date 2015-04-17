@@ -1,0 +1,20 @@
+package {{namespace}}
+
+import de.synectic.syn6.models.Security.Role
+import play.api.mvc._
+
+import scala.concurrent.Future
+
+case class {{name}}[A](block: (Request[A]) => SimpleResult) extends Action[A] {
+  def apply(request: Request[A]): Future[SimpleResult] = {
+    block(request)
+  }
+}
+
+object {{name}} extends ActionBuilder[Request] {
+  def invokeBlock[A](request: Request[A], block: (Request[A]) =>Future[SimpleResult]) = {
+    block(request)
+  }
+
+  override def composeAction[A](action: Action[A]) = new {{name}}(action)
+}

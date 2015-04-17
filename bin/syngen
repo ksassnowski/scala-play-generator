@@ -6,8 +6,10 @@ require __DIR__.'/../vendor/autoload.php';
 use Symfony\Component\Console\Application;
 use synectic\Generators\Commands\GenerateControllerCommand;
 use synectic\Generators\Commands\GenerateTestCommand;
+use synectic\Generators\Commands\GenerateActionCommand;
 
 $application = new Application();
 $application->add(new GenerateControllerCommand());
 $application->add(new GenerateTestCommand());
+$application->add(new GenerateActionCommand());
 $application->run();

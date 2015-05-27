@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 class GenerateTestCommand extends GeneratorCommand
 {
     /**
-     * Root namespace for controllers.
+     * Root namespace for tests.
      *
      * @var string
      */
@@ -34,6 +34,13 @@ class GenerateTestCommand extends GeneratorCommand
      * @var string
      */
     protected $description = 'Erzeugt einen neuen Test';
+
+    /**
+     * Type of the command.
+     * 
+     * @var string
+     */
+    protected $type = 'Test';
 
     /**
      * Get the template stub.

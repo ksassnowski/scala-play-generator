@@ -106,16 +106,6 @@ abstract class GeneratorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->fire();
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
-    protected function fire()
-    {
         $className = $this->input->getArgument('name');
 
         $path = $this->getPath($className);

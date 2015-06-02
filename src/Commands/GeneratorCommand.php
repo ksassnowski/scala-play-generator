@@ -192,7 +192,14 @@ abstract class GeneratorCommand extends Command
             return $this->rootNamespace;
         }
 
-        return $this->rootNamespace . '.' .implode(array_slice($nameParts, 0, -1), '.');
+        $namespace = implode(array_slice($nameParts, 0, -1), '.');
+
+        if (empty($this->rootNameSpace))
+        {
+            return $namespace;
+        }
+
+        return $this->rootNamespace . '.' . $namespace;
     }
 
     /**

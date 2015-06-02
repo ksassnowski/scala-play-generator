@@ -1,0 +1,15 @@
+package {{namespace}}
+
+/**
+ * {{name}} description...
+ *
+ * @author Kai Sassnowski
+ * @since
+ */
+trait {{name}} {
+    val implementation: Implementation
+
+    class Implementation {
+
+    }
+}

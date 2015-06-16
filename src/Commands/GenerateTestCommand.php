@@ -4,6 +4,8 @@ namespace synectic\Generators\Commands;
 
 use synectic\Generators\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateTestCommand extends GeneratorCommand
 {
@@ -42,6 +44,17 @@ class GenerateTestCommand extends GeneratorCommand
      */
     protected $type = 'Test';
 
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $suite = $input->getArgument('suite');
+
+        $this->rootNamespace = $suite;
+
+        $this->rootPath .= '/' . $suite;
+
+        parent::execute($input, $output);
+    }
+
     /**
      * Get the template stub.
      *
@@ -50,6 +63,16 @@ class GenerateTestCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->finder->get(__DIR__ . '/../stubs/Test.stub');
+    }
+
+    protected function getArguments()
+    {
+        parent::getArguments();
+
+        return [
+            ['suite', InputArgument::REQUIRED, 'Test Suite für diesen Test.'],
+            ['name', InputArgument::REQUIRED, 'Name der generierten Klasses'],
+        ];
     }
 
 }

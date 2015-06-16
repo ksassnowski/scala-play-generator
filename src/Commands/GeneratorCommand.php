@@ -194,7 +194,7 @@ abstract class GeneratorCommand extends Command
 
         $namespace = implode(array_slice($nameParts, 0, -1), '.');
 
-        if (empty($this->rootNameSpace))
+        if (empty($this->rootNamespace))
         {
             return $namespace;
         }
